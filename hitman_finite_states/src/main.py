@@ -1,7 +1,3 @@
-from curses import KEY_RIGHT
-import imp
-from shutil import move
-from turtle import width
 import pygame
 import window_functions as wf
 import player
@@ -13,17 +9,22 @@ COLOR = "#FE9A00"
 ICON = "../images/hitman_480px.png"
 BG_IMAGE = "../images/background_image.jpg"
 
+
 #INTIALIZE WINDOW OBJECT
 window = wf.Window(width=SCREEN_WIDTH,height=SCREEN_HEIGHT,title="Hitman",icon=ICON,color=COLOR,bg_image=BG_IMAGE)
 
-#player
+#Player
 x=100
 y=100
-FPS = 0.1
+FPS = 0.4
 RADIUS = 15
 USER_COLOR = "#1E53C6"
 user = player.User(window,x,y,FPS,RADIUS,USER_COLOR)
 
+
+#BOUNDARY
+X_LOWER_BOUND, X_UPPER_BOUND = RADIUS, SCREEN_WIDTH - RADIUS
+Y_LOWER_BOUND, Y_UPPER_BOUND = RADIUS, SCREEN_HEIGHT - RADIUS
 
 while True:
     
@@ -33,15 +34,20 @@ while True:
         # TO EXIT/QUIT the game
         window.quit_window(event.type)
         if event.type == pygame.KEYDOWN:
-
-            if event.key == pygame.K_RIGHT:
-                user.fps = 0.1
+            user.transition(event.type,event.key)
 
         if event.type == pygame.KEYUP:
-            
-            if event.key == pygame.K_RIGHT:
-                user.fps = 0
+            user.transition(event.type,event.key)
+
+
+    #CHECK BOUNDARY AND STOP MOVEMENT IF COLLIDE
+    if user.x < X_LOWER_BOUND or user.x > X_UPPER_BOUND:
+        user.horizontal_factor = 0
+    if user.y < Y_LOWER_BOUND or user.y > Y_UPPER_BOUND:
+        user.vertical_factor = 0
+    # MOVE THE USER
     user.move()
+
     #update background
     window.blit_background()
 
