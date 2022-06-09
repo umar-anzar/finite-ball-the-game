@@ -16,7 +16,7 @@ window = wf.Window(width=SCREEN_WIDTH,height=SCREEN_HEIGHT,title="Hitman",icon=I
 #Player
 x=100
 y=100
-FPS = 0.4
+FPS = 0.6
 RADIUS = 15
 USER_COLOR = "#1E53C6"
 user = player.User(window,x,y,FPS,RADIUS,USER_COLOR)
@@ -33,11 +33,10 @@ while True:
 
         # TO EXIT/QUIT the game
         window.quit_window(event.type)
-        if event.type == pygame.KEYDOWN:
-            user.transition(event.type,event.key)
 
-        if event.type == pygame.KEYUP:
-            user.transition(event.type,event.key)
+        # IF EVENT is key pressed so user perform action
+        user.transition(event)
+
 
 
     #CHECK BOUNDARY AND STOP MOVEMENT IF COLLIDE
@@ -45,7 +44,9 @@ while True:
         user.horizontal_factor = 0
     if user.y < Y_LOWER_BOUND or user.y > Y_UPPER_BOUND:
         user.vertical_factor = 0
-    # MOVE THE USER
+
+    # ACTION OF USER IN LOOP
+        # MOVE THE USER
     user.move()
 
     #update background
