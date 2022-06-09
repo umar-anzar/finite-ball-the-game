@@ -49,6 +49,24 @@ class User:
     def init(self):
         pygame.draw.circle(self.window.screen,pygame.Color(self.color),(self.x,self.y),self.radius)
 
+    def user_boundary(self,x_lower_bound, x_upper_bound, y_lower_bound, y_upper_bound):
+        if self.x < x_lower_bound:
+            self.x = x_lower_bound + 1
+        elif self.x > x_upper_bound:
+            self.x = x_upper_bound - 1
+        elif self.y < y_lower_bound:
+            self.y = y_lower_bound
+        elif self.y > y_upper_bound:
+            self.y = y_upper_bound
+
+    def user_boundaryx(self,x_lower_bound, x_upper_bound, y_lower_bound, y_upper_bound):
+        if self.x < x_lower_bound or self.x > x_upper_bound:
+            self.horizontal_factor = 0
+        if self.y < y_lower_bound or self.y > y_upper_bound:
+            self.vertical_factor = 0
+            
+
+
     def transition(self,event):
             # if event is pressed or release key
             if event.type == KEYUP or event.type == KEYDOWN:
@@ -56,31 +74,32 @@ class User:
                 try:
                     index = self.domain[event.key]
                     key = event.key
-                except NameError as e:
-                    #return if keys other than action keys
-                    return
 
-                #if key is release
-                if event.type == KEYUP:
+                    #if key is release
+                    if event.type == KEYUP:
 
-                    try:
-                        self.pressed.remove(key)
-                        self.current = 0
-                        self.statesFunctionArr[self.current]()
-
-                        for action in self.pressed:
-                            self.current = self.TransitionsTable[self.current][self.domain[action]]
+                        try:
+                            self.pressed.remove(key)
+                            self.current = 0
                             self.statesFunctionArr[self.current]()
 
-                    except KeyError as e:
-                        pass
+                            for action in self.pressed:
+                                self.current = self.TransitionsTable[self.current][self.domain[action]]
+                                self.statesFunctionArr[self.current]()
 
-                else:
-                    #if key is pressed
-                    self.pressed.add(key)
-                    self.current = self.TransitionsTable[self.current][index]
-  
-                self.statesFunctionArr[self.current]()
+                        except KeyError as e:
+                            pass
+
+                    else:
+                        #if key is pressed
+                        self.pressed.add(key)
+                        self.current = self.TransitionsTable[self.current][index]
+    
+                    self.statesFunctionArr[self.current]()
+
+                except Exception as e:
+                    #return if keys other than action keys
+                    pass
             
             else:
                 return
@@ -177,3 +196,9 @@ class User:
                 pass
             
         '''
+
+class Player(User):
+
+    def __init__(self,window,x,y,fps,radius,color,domain):
+        super().__init__(window,x,y,fps,radius,color)
+        self.domain = domain
