@@ -59,7 +59,7 @@ class User:
     #DRAW USER ON WINDOW
     def init(self):
         pygame.draw.circle(self.window.screen,pygame.Color(self.color),(self.x,self.y),self.radius)
-        pygame.draw.circle(self.window.screen,pygame.Color(self.color),(self.x,self.y),self.radius+4,width=2)
+        pygame.draw.circle(self.window.screen,pygame.Color(self.color),(self.x,self.y),self.radius+3,width=2)
 
     #STOPS USER FROM CROSSING BOUNDARY
     def user_boundary(self,x_lower_bound, x_upper_bound, y_lower_bound, y_upper_bound):

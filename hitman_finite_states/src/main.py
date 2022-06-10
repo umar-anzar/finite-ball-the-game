@@ -5,9 +5,9 @@ import player
 #Window Specification
 SCREEN_WIDTH = 900 # width (in px)
 SCREEN_HEIGHT = 600 # height (in px)
-COLOR = "#FE9A00"
-ICON = "../images/hitman_480px.png"
-BG_IMAGE = "../images/background_image.jpg"
+COLOR = "#F0A0BF"#"#FE9A00" orange
+ICON = "images/hitman_480px.png"
+BG_IMAGE = "images/background_image.jpg"
 
 
 #INTIALIZE WINDOW OBJECT
