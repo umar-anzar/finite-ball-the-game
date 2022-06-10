@@ -18,12 +18,14 @@ x=100
 y=100
 FPS = 0.4
 RADIUS = 15
-USER_COLOR = "#1E53C6"
-KEYBTN1 = {     pygame.K_RIGHT:0,
-                pygame.K_LEFT:1,
-                pygame.K_UP:2,
-                pygame.K_DOWN:3,
-                pygame.K_SPACE:4}
+USER_COLOR1 = "#1E53C6"
+USER_COLOR2 = "#FFA500"
+
+KEYBTN1 = {     pygame.K_RIGHT:0,   # right
+                pygame.K_LEFT:1,    # left
+                pygame.K_UP:2,      # up
+                pygame.K_DOWN:3,    # down
+                pygame.K_k:4}       # sprint
                 
 KEYBTN2 = {     pygame.K_d:0,
                 pygame.K_a:1,
@@ -31,9 +33,15 @@ KEYBTN2 = {     pygame.K_d:0,
                 pygame.K_s:3,
                 pygame.K_SPACE:4}
 
+KEYBTN3 = {     pygame.K_KP_6:0,
+                pygame.K_KP_4:1,
+                pygame.K_KP_8:2,
+                pygame.K_KP_5:3,
+                pygame.K_SPACE:4}
 
-user1 = player.Player(window,x,y,FPS,RADIUS,USER_COLOR,KEYBTN1)
-user2 = player.Player(window,x,y,FPS,RADIUS,USER_COLOR,KEYBTN2)
+
+user1 = player.Player(window,x,y,FPS,RADIUS,USER_COLOR1,KEYBTN1)
+user2 = player.Player(window,x,y,FPS,RADIUS,USER_COLOR2,KEYBTN2)
 
 
 #BOUNDARY
@@ -41,7 +49,10 @@ X_LOWER_BOUND, X_UPPER_BOUND = RADIUS, SCREEN_WIDTH - RADIUS
 Y_LOWER_BOUND, Y_UPPER_BOUND = RADIUS, SCREEN_HEIGHT - RADIUS
 
 while True:
-    
+    #update background (ALWAYS FIRST)
+    window.blit_background()
+
+
     #ITERATION ON ALL THE EVENT TYPE
     for event in pygame.event.get():
 
@@ -64,8 +75,7 @@ while True:
     user1.move()
     user2.move()
 
-    #update background
-    window.blit_background()
+
 
     #need updating the user
     user1.init()

@@ -1,10 +1,19 @@
 from pygame import *
 import pygame
+import time
+
 class User:
 
     def __init__(self,window,x,y,fps,radius,color) -> None:
         #REFERENCE WINDOW OBJECT
         self.window = window
+
+        #SPRINT
+        self.sprint_time_on = 0
+        self.sprint_time_off = 0
+        self.sprint_time_delay = 3
+        self.sprint_time_duration = 0.3
+        self.sprint_factor = 3
 
         #COORDINATES,RADIUS,COLOR,FRAME PER SECOND
         self.x = x
@@ -19,11 +28,12 @@ class User:
 
         # DOMAIN OF KEYS ACCEPTED
         
-        self.domain = { K_RIGHT:0,
-                        K_LEFT:1,
-                        K_UP:2,
-                        K_DOWN:3,
-                        K_SPACE:4}
+        self.domain = { }
+                        # K_RIGHT:0,
+                        # K_LEFT:1,
+                        # K_UP:2,
+                        # K_DOWN:3,
+                        # K_SPACE:4}
 
         #SET OF KEY which are pressed and haven't release
         self.pressed = set([])
@@ -36,19 +46,22 @@ class User:
 
         # TRANSITION TABLE
         self.TransitionsTable = [
-            [1,2,3,4,5],
-            [1,1,3,4,5],
-            [2,2,3,4,5],
-            [1,2,3,3,5],
-            [1,2,4,4,5],
-            [5,5,5,5,5]
+            [1,2,3,4,5],#initial    0
+            [1,1,3,4,5],#right      1
+            [2,2,3,4,5],#left       2
+            [1,2,3,3,5],#up         3
+            [1,2,4,4,5],#down       4
+            [1,2,3,4,5] #sprint     5
         ]
 
         self.init()
 
+    #DRAW USER ON WINDOW
     def init(self):
         pygame.draw.circle(self.window.screen,pygame.Color(self.color),(self.x,self.y),self.radius)
+        pygame.draw.circle(self.window.screen,pygame.Color(self.color),(self.x,self.y),self.radius+3,width=2)
 
+    #STOPS USER FROM CROSSING BOUNDARY
     def user_boundary(self,x_lower_bound, x_upper_bound, y_lower_bound, y_upper_bound):
         if self.x < x_lower_bound:
             self.x = x_lower_bound + 1
@@ -59,14 +72,7 @@ class User:
         elif self.y > y_upper_bound:
             self.y = y_upper_bound
 
-    def user_boundaryx(self,x_lower_bound, x_upper_bound, y_lower_bound, y_upper_bound):
-        if self.x < x_lower_bound or self.x > x_upper_bound:
-            self.horizontal_factor = 0
-        if self.y < y_lower_bound or self.y > y_upper_bound:
-            self.vertical_factor = 0
-            
-
-
+    #TRANSTITION FROM ONE STATE TO ANOTHER ON KEY PRESS AND RELEASE
     def transition(self,event):
             # if event is pressed or release key
             if event.type == KEYUP or event.type == KEYDOWN:
@@ -74,7 +80,6 @@ class User:
                 try:
                     index = self.domain[event.key]
                     key = event.key
-
                     #if key is release
                     if event.type == KEYUP:
 
@@ -105,39 +110,45 @@ class User:
                 return
 
 
+    #APPLY MOVING MOTION
     def move(self):
+
+        #HANDLE DIAGONAL SPEED (SAME AS ONLY X OR Y AXIS SPEED)
         if abs(self.horizontal_factor) == 1 and abs(self.vertical_factor) == 1:
             fps = ( (self.fps**2) /2)**(1/2)
         else:
             fps = self.fps
 
+        #FOR SPRINTING WITH DURATION
+        if abs(self.sprint_time_on - time.time()) < self.sprint_time_duration:
+            fps = fps * self.sprint_factor
+
         self.x += self.horizontal_factor * fps
         self.y += self.vertical_factor * fps
 
 
+
+    #PAUSE(INITIAL)
     def S0(self):
         self.horizontal_factor,self.vertical_factor = 0,0
-        self.move()
-
+    #RIGHT
     def S1(self):
         self.horizontal_factor = 1
-        self.move()    
-
+    #LEFT
     def S2(self):
         self.horizontal_factor= -1
-        self.move()
-
+    #UP
     def S3(self):
         self.vertical_factor = -1
-        self.move()
-
+    #DOWN
     def S4(self):
         self.vertical_factor = 1
-        self.move()
-
+    #SPRINT
     def S5(self):
-        self.horizontal_factor,self.vertical_factor = 0,0
-        self.move()
+        #RUNS WHEN TIME IS MORE THAN SPRINT DELAY TIME
+        if abs(self.sprint_time_off - time.time()) > self.sprint_time_delay :
+            self.sprint_time_off = time.time()
+            self.sprint_time_on = self.sprint_time_off
 
 
 
@@ -194,6 +205,12 @@ class User:
             
             else:
                 pass
+
+        def user_boundary(self,x_lower_bound, x_upper_bound, y_lower_bound, y_upper_bound):
+            if self.x < x_lower_bound or self.x > x_upper_bound:
+                self.horizontal_factor = 0
+            if self.y < y_lower_bound or self.y > y_upper_bound:
+                self.vertical_factor = 0
             
         '''
 
