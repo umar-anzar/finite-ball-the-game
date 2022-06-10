@@ -250,12 +250,51 @@ class Player(User):
 
 class Ball(MovableObject):
 
-    def __init__(self,window,x,y,fps,radius,color) -> None:
+    def __init__(self,window,x,y,fps,radius,color,size=None,image_location=None) -> None:
         #CALLING OBJECT CONSTRUCTOR
         super().__init__(window,x,y,fps,radius,color)
+
+    
+        self.image = image_location
+        self.size = size
+
+        self.ball_img = self.set_ball_image(self.image)
+
 
         self.init()
 
     #DRAW BALL ON WINDOW
     def init(self):
-        pygame.draw.circle(self.window.screen,pygame.Color(self.color),(self.x,self.y),self.radius)
+        if self.image:
+            self.window.screen.blit(self.ball_img, (self.x,self.y))
+        else:
+            pygame.draw.circle(self.window.screen, pygame.Color(self.color), (self.x,self.y), self.radius)
+
+    def set_ball_image(self,location):
+        if location:
+            ball_img = pygame.image.load(location).convert()
+            ball_img.set_alpha(200)
+            ball_img = pygame.transform.scale(ball_img,self.size)
+            return ball_img
+
+    #movement of ball
+    def move(self):
+        '''
+        if self.fps > 0:
+            self.fps = int(self.fps - 0.0001)
+        if self.fps <= 0:
+            self.fps = 0
+            self.horizontal_factor = 0
+            self.vertical_factor = 0
+        '''
+
+        fps = self.fps
+        self.x += self.horizontal_factor * fps
+        self.y += self.vertical_factor * fps
+
+    def ball_boundary(self,x_lower_bound, x_upper_bound, y_lower_bound, y_upper_bound):
+        if self.x < x_lower_bound or  self.x > x_upper_bound:
+            self.horizontal_factor = self.horizontal_factor * -1
+        if self.y < y_lower_bound or self.y > y_upper_bound:
+            self.vertical_factor = self.vertical_factor * -1
+

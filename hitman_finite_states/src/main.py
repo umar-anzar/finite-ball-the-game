@@ -48,9 +48,14 @@ x =  SCREEN_WIDTH//2
 y =  SCREEN_HEIGHT//2
 FPS = 0
 RADIUS = 12
-BALL_COLOR = "#FFFFFF"
+BALL_COLOR = "#FF2222"
+
 
 ball = object.Ball(window,x,y,FPS,RADIUS,BALL_COLOR)
+
+ball.horizontal_factor = 1
+ball.vertical_factor = 1
+ball.fps = 1
 
 #BOUNDARY---------------------------------------------------------------------------------------------------------------
 X_LOWER_BOUND, X_UPPER_BOUND = RADIUS, SCREEN_WIDTH - RADIUS
@@ -79,19 +84,21 @@ while True:
     #CHECK BOUNDARY AND STOP MOVEMENT IF COLLIDE
     user1.user_boundary(X_LOWER_BOUND, X_UPPER_BOUND, Y_LOWER_BOUND, Y_UPPER_BOUND)
     user2.user_boundary(X_LOWER_BOUND, X_UPPER_BOUND, Y_LOWER_BOUND, Y_UPPER_BOUND)
+    ball.ball_boundary(X_LOWER_BOUND, X_UPPER_BOUND, Y_LOWER_BOUND, Y_UPPER_BOUND)
 
 
     # ACTION OF USER IN LOOP
         # MOVE THE USER
     user1.move()
     user2.move()
+    ball.move()
 
 
 
     #need updating the user and ball
-    ball.init()
     user1.init()
     user2.init()
+    ball.init()
 
 
 
