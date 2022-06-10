@@ -20,7 +20,6 @@ class MovableObject:
 
 
 
-
 class User(MovableObject):
 
     def __init__(self,window,x,y,fps,radius,color) -> None:
@@ -279,22 +278,26 @@ class Ball(MovableObject):
 
     #movement of ball
     def move(self):
-        '''
+
         if self.fps > 0:
-            self.fps = int(self.fps - 0.0001)
+            self.fps = self.fps - 0.001
         if self.fps <= 0:
             self.fps = 0
             self.horizontal_factor = 0
-            self.vertical_factor = 0
-        '''
+
 
         fps = self.fps
         self.x += self.horizontal_factor * fps
         self.y += self.vertical_factor * fps
 
+    #Window Boundary reflection
     def ball_boundary(self,x_lower_bound, x_upper_bound, y_lower_bound, y_upper_bound):
         if self.x < x_lower_bound or  self.x > x_upper_bound:
             self.horizontal_factor = self.horizontal_factor * -1
         if self.y < y_lower_bound or self.y > y_upper_bound:
             self.vertical_factor = self.vertical_factor * -1
 
+
+    def on_hit(self,player:Player):
+        if player.x + player.radius:
+            pass 
