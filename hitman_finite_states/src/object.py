@@ -299,5 +299,14 @@ class Ball(MovableObject):
 
 
     def on_hit(self,player:Player):
-        if player.x + player.radius:
-            pass 
+        player_x_bound = player.x
+        player_y_bound = player.y
+        ball_x_bound = self.x
+        ball_y_bound = self.y
+        distance = ( (player_x_bound - ball_x_bound)**2 - (player_y_bound - ball_y_bound)**2 )**2
+
+        
+        if distance > 0 and distance < self.radius+player.radius:
+            self.horizontal_factor = player.horizontal_factor
+            self.vertical_factor = player.vertical_factor
+            self.fps = player.fps * 2
