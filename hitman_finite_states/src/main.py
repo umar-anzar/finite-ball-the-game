@@ -1,21 +1,21 @@
 import pygame
 import window_functions as wf
-import player
+import object
 
-#Window Specification
-SCREEN_WIDTH = 900 # width (in px)
+#Window Specification---------------------------------------------------------------------------------------------------
+SCREEN_WIDTH = 1000 # width (in px)
 SCREEN_HEIGHT = 600 # height (in px)
-COLOR = "#F0A0BF"#"#FE9A00" orange
+COLOR = "#FE9A00"
 ICON = "images/hitman_480px.png"
-BG_IMAGE = "images/background_image.jpg"
+BG_IMAGE = "images/soccer-field.jpg"
 
 
 #INTIALIZE WINDOW OBJECT
-window = wf.Window(width=SCREEN_WIDTH,height=SCREEN_HEIGHT,title="Hitman",icon=ICON,color=COLOR,bg_image=BG_IMAGE)
+window = wf.Window(width=SCREEN_WIDTH,height=SCREEN_HEIGHT,title="Hitman",icon=ICON,bg_image=BG_IMAGE)
 
-#Player
-x=100
-y=100
+#Player-----------------------------------------------------------------------------------------------------------------
+x1,x2=SCREEN_WIDTH*20/100,SCREEN_WIDTH*80/100
+y1,y2= SCREEN_HEIGHT//2, SCREEN_HEIGHT//2
 FPS = 0.4
 RADIUS = 15
 USER_COLOR1 = "#1E53C6"
@@ -40,14 +40,25 @@ KEYBTN3 = {     pygame.K_KP_6:0,
                 pygame.K_SPACE:4}
 
 
-user1 = player.Player(window,x,y,FPS,RADIUS,USER_COLOR1,KEYBTN1)
-user2 = player.Player(window,x,y,FPS,RADIUS,USER_COLOR2,KEYBTN2)
+user1 = object.Player(window,x1,y1,FPS,RADIUS,USER_COLOR1,KEYBTN1)
+user2 = object.Player(window,x2,y2,FPS,RADIUS,USER_COLOR2,KEYBTN2)
 
+#BALL-------------------------------------------------------------------------------------------------------------------
+x =  SCREEN_WIDTH//2
+y =  SCREEN_HEIGHT//2
+FPS = 0
+RADIUS = 12
+BALL_COLOR = "#FFFFFF"
 
-#BOUNDARY
+ball = object.Ball(window,x,y,FPS,RADIUS,BALL_COLOR)
+
+#BOUNDARY---------------------------------------------------------------------------------------------------------------
 X_LOWER_BOUND, X_UPPER_BOUND = RADIUS, SCREEN_WIDTH - RADIUS
 Y_LOWER_BOUND, Y_UPPER_BOUND = RADIUS, SCREEN_HEIGHT - RADIUS
 
+
+
+#PROGRAM LOOP-----------------------------------------------------------------------------------------------------------
 while True:
     #update background (ALWAYS FIRST)
     window.blit_background()
@@ -77,7 +88,8 @@ while True:
 
 
 
-    #need updating the user
+    #need updating the user and ball
+    ball.init()
     user1.init()
     user2.init()
 
