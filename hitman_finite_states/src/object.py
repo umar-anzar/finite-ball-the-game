@@ -169,6 +169,131 @@ class User(MovableObject):
             self.sprint_time_off = time.time()
             self.sprint_time_on = self.sprint_time_off
 
+class Player(User):
+
+    def __init__(self,window,x,y,fps,radius,color,domain):
+        #CALLING USER CONSTRUCTOR
+        super().__init__(window,x,y,fps,radius,color)
+        
+        self.domain = domain
+        # DOMAIN OF KEYS ACCEPTED
+        #self.domain = { }
+                        # K_RIGHT:0,
+                        # K_LEFT:1,
+                        # K_UP:2,
+                        # K_DOWN:3,
+                        # K_SPACE:4}
+
+
+class Ball(MovableObject):
+
+    def __init__(self,window,x,y,fps,radius,color) -> None:
+        #CALLING OBJECT CONSTRUCTOR
+        super().__init__(window,x,y,fps,radius,color)
+        self.init()
+
+
+    #DRAW BALL ON WINDOW
+    def init(self):
+        pygame.draw.circle(self.window.screen, pygame.Color(self.color), (self.x,self.y), self.radius)
+
+    #movement of ball
+    def move(self):
+
+        if self.fps > 0:
+            self.fps = self.fps - 0.1
+        if self.fps <= 0:
+            self.fps = 0
+            self.horizontal_factor = 0
+            self.vertical_factor = 0
+
+
+        fps = self.fps
+        self.x += self.horizontal_factor * fps
+        self.y += self.vertical_factor * fps
+
+
+
+    #Window Boundary reflection
+    def ball_boundary(self,x_lower_bound, x_upper_bound, y_lower_bound, y_upper_bound):
+        if self.x < x_lower_bound or  self.x > x_upper_bound:
+            self.horizontal_factor = self.horizontal_factor * -1
+
+        if self.y < y_lower_bound or self.y > y_upper_bound:
+            self.vertical_factor = self.vertical_factor * -1
+
+    def bring_in_center(self):
+        self.x = self.window.screen.get_width() // 2
+        self.y = self.window.screen.get_height() // 2
+        self.fps = 0
+
+    def out_of_boundary(self,x_lower_bound, x_upper_bound, y_lower_bound, y_upper_bound):
+        if (self.x < x_lower_bound - self.radius or  
+            self.x > x_upper_bound + self.radius or 
+            self.y < y_lower_bound - self.radius or 
+            self.y > y_upper_bound + self.radius):
+
+            self.bring_in_center()
+
+    #WHEN PLAYER HITS THE BALL
+    def on_hit(self,player:Player):
+        player_x_bound = player.x
+        player_y_bound = player.y
+        ball_x_bound = self.x
+        ball_y_bound = self.y
+        distance = math.sqrt( ( (player_x_bound - ball_x_bound)**2 + (player_y_bound - ball_y_bound)**2 ) )
+
+        #if ball is near the player
+        if distance > 0 and distance < self.radius + player.radius:
+
+            # if player isn't moving
+            if player.horizontal_factor and player.vertical_factor == 0:
+                if self.vertical_factor == 0:
+                    self.horizontal_factor *= -1
+                else:
+                    self.vertical_factor *= -1
+
+
+            else:
+
+                try:
+                    '''
+                        gradient converts into degree of 0-90
+                        degree is then normalize 0-1
+                        due to absoulute value of gradient we need to handle the negative side movment of the ball
+                    '''
+                    gradient = abs( (self.y - player.y) / (self.x - player.x) )
+                    normalize_degree = math.degrees(math.atan( gradient ) / 90) 
+
+                except DivisionByZero as e:
+                    # if gradient is infinity
+                    normalize_degree = 1
+                
+
+                '''
+                    y componenet is set to normalize degree
+                    x componenet is set to 1-normalize degree 
+                '''
+                self.horizontal_factor = (1 - normalize_degree) #* player.horizontal_factor
+                self.vertical_factor = normalize_degree #* player.vertical_factor
+
+                '''
+                    if player is coming from right or top to the ball then movment of ball is reverse
+                '''
+                if player.x > self.x:
+                    self.horizontal_factor *= -1
+                if player.y > self.y:
+                    self.vertical_factor *= -1
+
+
+
+            self.fps = player.fps * 2
+
+        
+
+
+
+
 
 
 
@@ -233,90 +358,8 @@ class User(MovableObject):
             
         '''
 
-class Player(User):
 
-    def __init__(self,window,x,y,fps,radius,color,domain):
-        #CALLING USER CONSTRUCTOR
-        super().__init__(window,x,y,fps,radius,color)
-        
-        self.domain = domain
-        # DOMAIN OF KEYS ACCEPTED
-        #self.domain = { }
-                        # K_RIGHT:0,
-                        # K_LEFT:1,
-                        # K_UP:2,
-                        # K_DOWN:3,
-                        # K_SPACE:4}
-
-
-
-class Ball(MovableObject):
-
-    def __init__(self,window,x,y,fps,radius,color,size=None,image_location=None) -> None:
-        #CALLING OBJECT CONSTRUCTOR
-        super().__init__(window,x,y,fps,radius,color)
-
-    
-        self.image = image_location
-        self.size = size
-
-        self.ball_img = self.set_ball_image(self.image)
-
-        self.init()
-
-    #DRAW BALL ON WINDOW
-    def init(self):
-        if self.image:
-            self.window.screen.blit(self.ball_img, (self.x,self.y))
-        else:
-            pygame.draw.circle(self.window.screen, pygame.Color(self.color), (self.x,self.y), self.radius)
-
-    def set_ball_image(self,location):
-        if location:
-            ball_img = pygame.image.load(location).convert()
-            ball_img.set_alpha(200)
-            ball_img = pygame.transform.scale(ball_img,self.size)
-            return ball_img
-
-    #movement of ball
-    def move(self):
-
-        if self.fps > 0:
-            self.fps = self.fps - 0.1
-        if self.fps <= 0:
-            self.fps = 0
-            self.horizontal_factor = 0
-            self.vertical_factor = 0
-
-
-        fps = self.fps
-        self.x += self.horizontal_factor * fps
-        self.y += self.vertical_factor * fps
-
-
-
-    #Window Boundary reflection
-    def ball_boundary(self,x_lower_bound, x_upper_bound, y_lower_bound, y_upper_bound):
-        if self.x < x_lower_bound or  self.x > x_upper_bound:
-            self.horizontal_factor = self.horizontal_factor * -1
-
-        if self.y < y_lower_bound or self.y > y_upper_bound:
-            self.vertical_factor = self.vertical_factor * -1
-
-    def bring_in_center(self):
-        self.x = self.window.screen.get_width() // 2
-        self.y = self.window.screen.get_height() // 2
-        self.fps = 0
-
-    def out_of_boundary(self,x_lower_bound, x_upper_bound, y_lower_bound, y_upper_bound):
-        if (self.x < x_lower_bound - self.radius or  
-            self.x > x_upper_bound + self.radius or 
-            self.y < y_lower_bound - self.radius or 
-            self.y > y_upper_bound + self.radius):
-
-            self.bring_in_center()
-
-    '''
+'''
     def on_hit(self,player:Player):
         player_x_bound = player.x
         player_y_bound = player.y
@@ -329,60 +372,4 @@ class Ball(MovableObject):
             self.horizontal_factor = player.horizontal_factor
             self.vertical_factor = player.vertical_factor
             self.fps = player.fps * 2
-    '''
-
-    #WHEN PLAYER HITS THE BALL
-    def on_hit(self,player:Player):
-        player_x_bound = player.x
-        player_y_bound = player.y
-        ball_x_bound = self.x
-        ball_y_bound = self.y
-        distance = math.sqrt( ( (player_x_bound - ball_x_bound)**2 + (player_y_bound - ball_y_bound)**2 ) )
-
-        #if ball is near the player
-        if distance > 0 and distance < self.radius + player.radius:
-
-            # if player isn't moving
-            if player.horizontal_factor and player.vertical_factor == 0:
-                if self.vertical_factor == 0:
-                    self.horizontal_factor *= -1
-                else:
-                    self.vertical_factor *= -1
-
-
-            else:
-
-                try:
-                    '''
-                        gradient converts into degree of 0-90
-                        degree is then normalize 0-1
-                        due to absoulute value of gradient we need to handle the negative side movment of the ball
-                    '''
-                    gradient = abs( (self.y - player.y) / (self.x - player.x) )
-                    normalize_degree = math.degrees(math.atan( gradient ) / 90) 
-
-                except DivisionByZero as e:
-                    # if gradient is infinity
-                    normalize_degree = 1
-                
-
-                '''
-                    y componenet is set to normalize degree
-                    x componenet is set to 1-normalize degree 
-                '''
-                self.horizontal_factor = (1 - normalize_degree) #* player.horizontal_factor
-                self.vertical_factor = normalize_degree #* player.vertical_factor
-
-                '''
-                    if player is coming from right or top to the ball then movment of ball is reverse
-                '''
-                if player.x > self.x:
-                    self.horizontal_factor *= -1
-                if player.y > self.y:
-                    self.vertical_factor *= -1
-
-
-
-            self.fps = player.fps * 2
-
-        
+'''
