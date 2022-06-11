@@ -1,9 +1,12 @@
+from window_functions import *
+from decimal import DivisionByZero
 import pygame
 import time
+import math
 
 class MovableObject:
 
-    def __init__(self,window,x,y,fps,radius,color) -> None:
+    def __init__(self,window:Window,x,y,fps,radius,color) -> None:
         #REFERENCE WINDOW OBJECT
         self.window = window
 
@@ -259,6 +262,10 @@ class Ball(MovableObject):
 
         self.ball_img = self.set_ball_image(self.image)
 
+        #LINEAR EQUATION OF BALL
+        self.gradient = 0
+        self.constant_x = 0
+        self.constant_y = 0
 
         self.init()
 
@@ -280,33 +287,79 @@ class Ball(MovableObject):
     def move(self):
 
         if self.fps > 0:
-            self.fps = self.fps - 0.001
+            self.fps = self.fps - 0.1
         if self.fps <= 0:
             self.fps = 0
             self.horizontal_factor = 0
+            self.vertical_factor = 0
 
 
         fps = self.fps
         self.x += self.horizontal_factor * fps
         self.y += self.vertical_factor * fps
 
+
+
     #Window Boundary reflection
     def ball_boundary(self,x_lower_bound, x_upper_bound, y_lower_bound, y_upper_bound):
         if self.x < x_lower_bound or  self.x > x_upper_bound:
             self.horizontal_factor = self.horizontal_factor * -1
+
         if self.y < y_lower_bound or self.y > y_upper_bound:
             self.vertical_factor = self.vertical_factor * -1
 
+    def bring_in_center(self):
+        self.x = self.window.screen.get_width() // 2
+        self.y = self.window.screen.get_height() // 2
+        self.fps = 0
 
+    def out_of_boundary(self,x_lower_bound, x_upper_bound, y_lower_bound, y_upper_bound):
+        if (self.x < x_lower_bound - self.radius or  
+            self.x > x_upper_bound + self.radius or 
+            self.y < y_lower_bound - self.radius or 
+            self.y > y_upper_bound + self.radius):
+
+            self.bring_in_center()
+
+    '''
     def on_hit(self,player:Player):
         player_x_bound = player.x
         player_y_bound = player.y
         ball_x_bound = self.x
         ball_y_bound = self.y
-        distance = ( (player_x_bound - ball_x_bound)**2 - (player_y_bound - ball_y_bound)**2 )**2
+        distance = math.sqrt( ( (player_x_bound - ball_x_bound)**2 + (player_y_bound - ball_y_bound)**2 ) )
 
         
         if distance > 0 and distance < self.radius+player.radius:
             self.horizontal_factor = player.horizontal_factor
             self.vertical_factor = player.vertical_factor
             self.fps = player.fps * 2
+    '''
+    def on_hit(self,player:Player):
+        player_x_bound = player.x
+        player_y_bound = player.y
+        ball_x_bound = self.x
+        ball_y_bound = self.y
+        distance = math.sqrt( ( (player_x_bound - ball_x_bound)**2 + (player_y_bound - ball_y_bound)**2 ) )
+
+        if distance > 0 and distance < self.radius + player.radius:
+            try:
+                gradient = abs( (self.y - player.y) / (self.x - player.x) )
+                self.gradient = math.degrees(math.atan( gradient ) / 90) 
+            except DivisionByZero as e:
+                self.gradient = 1
+            
+            if player.horizontal_factor + player.vertical_factor == 0:
+                if self.vertical_factor == 0:
+                    self.horizontal_factor *= -1
+                else:
+                    self.vertical_factor *= -1
+            else:
+                self.horizontal_factor = (1 - self.gradient) #* player.horizontal_factor
+                self.vertical_factor = self.gradient #* player.vertical_factor
+                if (player.x) > (self.x):
+                    self.horizontal_factor *= -1
+                    self.vertical_factor *= -1
+                self.fps = player.fps * 2
+
+        

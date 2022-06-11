@@ -14,9 +14,9 @@ BG_IMAGE = "images/soccer-field.jpg"
 window = wf.Window(width=SCREEN_WIDTH,height=SCREEN_HEIGHT,title="FINITE_BALL",icon=ICON,bg_image=BG_IMAGE)
 
 #Player-----------------------------------------------------------------------------------------------------------------
-x1,x2=SCREEN_WIDTH*20/100,SCREEN_WIDTH*80/100
-y1,y2= SCREEN_HEIGHT//2, SCREEN_HEIGHT//2
-FPS = 0.6
+x1, x2 = SCREEN_WIDTH * 20/100, SCREEN_WIDTH * 80/100
+y1, y2 = SCREEN_HEIGHT // 2, SCREEN_HEIGHT// 2
+FPS = 5
 RADIUS = 15
 USER_COLOR1 = "#1E53C6"
 USER_COLOR2 = "#FFA500"
@@ -37,7 +37,7 @@ KEYBTN3 = {     pygame.K_KP_6:0,
                 pygame.K_KP_4:1,
                 pygame.K_KP_8:2,
                 pygame.K_KP_5:3,
-                pygame.K_SPACE:4}
+                pygame.K_KP_0:4}
 
 
 user1 = object.Player(window,x1,y1,FPS,RADIUS,USER_COLOR1,KEYBTN1)
@@ -53,9 +53,6 @@ BALL_COLOR = "#FF2222"
 
 ball = object.Ball(window,x,y,FPS,RADIUS,BALL_COLOR)
 
-# ball.horizontal_factor = 1
-# ball.vertical_factor = 1
-# ball.fps = 1
 
 #BOUNDARY---------------------------------------------------------------------------------------------------------------
 X_LOWER_BOUND, X_UPPER_BOUND = RADIUS, SCREEN_WIDTH - RADIUS
@@ -64,9 +61,17 @@ Y_LOWER_BOUND, Y_UPPER_BOUND = RADIUS, SCREEN_HEIGHT - RADIUS
 X_BALL_LOWER_BOUND, X_BALL_UPPER_BOUND = BALL_RADIUS, SCREEN_WIDTH - BALL_RADIUS
 Y_BALL_LOWER_BOUND, Y_BALL_UPPER_BOUND = BALL_RADIUS, SCREEN_HEIGHT - BALL_RADIUS
 
+#GAME FPS
+GAME_FPS = 60
+clock = pygame.time.Clock()
 
 #PROGRAM LOOP-----------------------------------------------------------------------------------------------------------
 while True:
+
+    #FPS OF GAME
+    clock.tick(GAME_FPS)
+
+
     #update background (ALWAYS FIRST)
     window.blit_background()
 
@@ -90,6 +95,7 @@ while True:
     user1.user_boundary(X_LOWER_BOUND, X_UPPER_BOUND, Y_LOWER_BOUND, Y_UPPER_BOUND)
     user2.user_boundary(X_LOWER_BOUND, X_UPPER_BOUND, Y_LOWER_BOUND, Y_UPPER_BOUND)
     ball.ball_boundary(X_LOWER_BOUND, X_UPPER_BOUND, Y_LOWER_BOUND, Y_UPPER_BOUND)
+    ball.out_of_boundary(X_LOWER_BOUND, X_UPPER_BOUND, Y_LOWER_BOUND, Y_UPPER_BOUND)
 
 
     # ACTION OF USER IN LOOP
