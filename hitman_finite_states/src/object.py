@@ -262,11 +262,6 @@ class Ball(MovableObject):
 
         self.ball_img = self.set_ball_image(self.image)
 
-        #LINEAR EQUATION OF BALL
-        self.gradient = 0
-        self.constant_x = 0
-        self.constant_y = 0
-
         self.init()
 
     #DRAW BALL ON WINDOW
@@ -335,6 +330,8 @@ class Ball(MovableObject):
             self.vertical_factor = player.vertical_factor
             self.fps = player.fps * 2
     '''
+
+    #WHEN PLAYER HITS THE BALL
     def on_hit(self,player:Player):
         player_x_bound = player.x
         player_y_bound = player.y
@@ -342,24 +339,50 @@ class Ball(MovableObject):
         ball_y_bound = self.y
         distance = math.sqrt( ( (player_x_bound - ball_x_bound)**2 + (player_y_bound - ball_y_bound)**2 ) )
 
+        #if ball is near the player
         if distance > 0 and distance < self.radius + player.radius:
-            try:
-                gradient = abs( (self.y - player.y) / (self.x - player.x) )
-                self.gradient = math.degrees(math.atan( gradient ) / 90) 
-            except DivisionByZero as e:
-                self.gradient = 1
-            
-            if player.horizontal_factor + player.vertical_factor == 0:
+
+            # if player isn't moving
+            if player.horizontal_factor and player.vertical_factor == 0:
                 if self.vertical_factor == 0:
                     self.horizontal_factor *= -1
                 else:
                     self.vertical_factor *= -1
+
+
             else:
-                self.horizontal_factor = (1 - self.gradient) #* player.horizontal_factor
-                self.vertical_factor = self.gradient #* player.vertical_factor
-                if (player.x) > (self.x):
+
+                try:
+                    '''
+                        gradient converts into degree of 0-90
+                        degree is then normalize 0-1
+                        due to absoulute value of gradient we need to handle the negative side movment of the ball
+                    '''
+                    gradient = abs( (self.y - player.y) / (self.x - player.x) )
+                    normalize_degree = math.degrees(math.atan( gradient ) / 90) 
+
+                except DivisionByZero as e:
+                    # if gradient is infinity
+                    normalize_degree = 1
+                
+
+                '''
+                    y componenet is set to normalize degree
+                    x componenet is set to 1-normalize degree 
+                '''
+                self.horizontal_factor = (1 - normalize_degree) #* player.horizontal_factor
+                self.vertical_factor = normalize_degree #* player.vertical_factor
+
+                '''
+                    if player is coming from right or top to the ball then movment of ball is reverse
+                '''
+                if player.x > self.x:
                     self.horizontal_factor *= -1
+                if player.y > self.y:
                     self.vertical_factor *= -1
-                self.fps = player.fps * 2
+
+
+
+            self.fps = player.fps * 2
 
         

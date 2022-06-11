@@ -6,12 +6,12 @@ import object
 SCREEN_WIDTH = 1000 # width (in px)
 SCREEN_HEIGHT = 600 # height (in px)
 COLOR = "#FE9A00"
-ICON = "images/hitman_480px.png"
+ICON = "images\icons8_football_kick_256.png"
 BG_IMAGE = "images/soccer-field.jpg"
 
 
 #INTIALIZE WINDOW OBJECT
-window = wf.Window(width=SCREEN_WIDTH,height=SCREEN_HEIGHT,title="FINITE_BALL",icon=ICON,bg_image=BG_IMAGE)
+window = wf.Window(width=SCREEN_WIDTH,height=SCREEN_HEIGHT,title="FINITE_BALL by Umar Anzar",icon=ICON,bg_image=BG_IMAGE)
 
 #Player-----------------------------------------------------------------------------------------------------------------
 x1, x2 = SCREEN_WIDTH * 20/100, SCREEN_WIDTH * 80/100
@@ -47,11 +47,11 @@ user2 = object.Player(window,x2,y2,FPS,RADIUS,USER_COLOR2,KEYBTN2)
 x =  SCREEN_WIDTH//2
 y =  SCREEN_HEIGHT//2
 FPS = 0
-BALL_RADIUS = 12
+BALL_RADIUS = 15
 BALL_COLOR = "#FF2222"
 
 
-ball = object.Ball(window,x,y,FPS,RADIUS,BALL_COLOR)
+ball = object.Ball(window,x,y,FPS,BALL_RADIUS,BALL_COLOR)
 
 
 #BOUNDARY---------------------------------------------------------------------------------------------------------------
