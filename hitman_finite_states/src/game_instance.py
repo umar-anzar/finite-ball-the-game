@@ -1,17 +1,27 @@
 import pygame
 import window_functions as wf
 import object
+import score
 
 #Window Specification---------------------------------------------------------------------------------------------------
 SCREEN_WIDTH = 1000 # width (in px)
 SCREEN_HEIGHT = 600 # height (in px)
 COLOR = "#FE9A00"
-ICON = "images\icons8_football_kick_256.png"
-BG_IMAGE = "images/soccer-field.jpg"
+ICON = "images/window_icon/icons8_football_kick_256.png"
+BG_IMAGE = "images/background/soccer-field.jpg"
 
 
 #INTIALIZE WINDOW OBJECT
 window = wf.Window(width=SCREEN_WIDTH,height=SCREEN_HEIGHT,title="FINITE_BALL by Umar Anzar",icon=ICON,bg_image=BG_IMAGE)
+
+
+#SCORE------------------------------------------------------------------------------------------------------------------
+x1,x2 = 0,0
+y1,y2 = 0,0
+SIZE = (100,100)
+SCORE_LOCATION = 'images/score/score_{}.png'
+score1 = score.Score(window,x1,y1,SIZE,SCORE_LOCATION)
+score2 = score.Score(window,x1,y1,SIZE,SCORE_LOCATION)
 
 #Player-----------------------------------------------------------------------------------------------------------------
 x1, x2 = SCREEN_WIDTH * 20/100, SCREEN_WIDTH * 80/100
@@ -106,11 +116,11 @@ while True:
 
 
 
-    #need updating the user and ball
+    #need updating the user, ball, score
     user1.init()
     user2.init()
     ball.init()
-
+    score1.init()
 
 
     #update pygame display

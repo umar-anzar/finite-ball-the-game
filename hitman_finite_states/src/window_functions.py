@@ -41,7 +41,6 @@ class Window():
             bg_img = pygame.transform.scale(bg_img,self.screen.get_size())
             return bg_img
 
-    
     #BLIT BACKGROUND
     def blit_background(self):
         self.screen.fill(pygame.Color(self.bg_color))
