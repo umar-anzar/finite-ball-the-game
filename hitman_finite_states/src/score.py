@@ -15,12 +15,13 @@ class Score:
         #PUT ALL IMAGES IN ARRAY
         self.score_img_array = []
         try:
-            for i in range(6):
+            for i in range(7):
                 self.score_img_array.append((pygame.transform.scale(pygame.image.load(location1.format(i)).convert_alpha(),size),
                 pygame.transform.scale(pygame.image.load(location2.format(i)).convert_alpha(),size)))
         except Exception:
             pass
 
+        #SCORE OF TWO TEAMS
         self.left_score = 0
         self.right_score = 0
 
@@ -53,7 +54,7 @@ class Score:
             for player in players:
                 player.respawn()
 
-        #WHO WON
+        #WHO WON AND THEN RESET SCORE
         if self.left_score == len(self.score_img_array) - 1:
             self.goal_animation("Blue Won")
             self.reset_score()
