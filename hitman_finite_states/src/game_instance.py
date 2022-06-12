@@ -19,9 +19,10 @@ window = wf.Window(width=SCREEN_WIDTH,height=SCREEN_HEIGHT,title="FINITE_BALL by
 x1,x2 = 0,0
 y1,y2 = 0,0
 SIZE = (100,100)
-SCORE_LOCATION = 'images/score/score_{}.png'
-score1 = score.Score(window,x1,y1,SIZE,SCORE_LOCATION)
-score2 = score.Score(window,x1,y1,SIZE,SCORE_LOCATION)
+SCORE_LOCATION1 = 'images/score/score1/score_{}.png'
+SCORE_LOCATION2 = 'images/score/score2/score_{}.png'
+score_obj = score.Score(window,x1,y1,SIZE,SCORE_LOCATION1,SCORE_LOCATION2)
+
 
 #Player-----------------------------------------------------------------------------------------------------------------
 x1, x2 = SCREEN_WIDTH * 20/100, SCREEN_WIDTH * 80/100
@@ -120,7 +121,7 @@ while True:
     user1.init()
     user2.init()
     ball.init()
-    score1.init()
+    score_obj.init()
 
 
     #update pygame display
