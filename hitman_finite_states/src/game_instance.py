@@ -16,13 +16,13 @@ window = wf.Window(width=SCREEN_WIDTH,height=SCREEN_HEIGHT,title="FINITE_BALL by
 
 
 #SCORE------------------------------------------------------------------------------------------------------------------
-x1,x2 = 0,0
-y1,y2 = 0,0
 SIZE = (100,100)
+score_coordinate1 = (0,0)
+score_coordinate2 = (SCREEN_WIDTH-100,0)
 SCORE_LOCATION1 = 'images/score/score1/score_{}.png'
 SCORE_LOCATION2 = 'images/score/score2/score_{}.png'
-score_obj = score.Score(window,x1,y1,SIZE,SCORE_LOCATION1,SCORE_LOCATION2)
-
+score_obj = score.Score(window,score_coordinate1,score_coordinate2,SIZE,SCORE_LOCATION1,SCORE_LOCATION2)
+SCORE_BOUNDARY_PERCENT = (41.66,57.5)
 
 #Player-----------------------------------------------------------------------------------------------------------------
 x1, x2 = SCREEN_WIDTH * 20/100, SCREEN_WIDTH * 80/100
@@ -32,13 +32,13 @@ RADIUS = 15
 USER_COLOR1 = "#1CB3FF"
 USER_COLOR2 = "#FFA500"
 
-KEYBTN1 = {     pygame.K_RIGHT:0,   # right
+KEYBTN2 = {     pygame.K_RIGHT:0,   # right
                 pygame.K_LEFT:1,    # left
                 pygame.K_UP:2,      # up
                 pygame.K_DOWN:3,    # down
                 pygame.K_k:4}       # sprint
                 
-KEYBTN2 = {     pygame.K_d:0,
+KEYBTN1 = {     pygame.K_d:0,
                 pygame.K_a:1,
                 pygame.K_w:2,
                 pygame.K_s:3,
@@ -83,7 +83,7 @@ while True:
     clock.tick(GAME_FPS)
 
 
-    #update background (ALWAYS FIRST)
+    #update backgrund (ALWAYS FIRST)
     window.blit_background()
 
 
@@ -108,6 +108,8 @@ while True:
     ball.ball_boundary(X_LOWER_BOUND, X_UPPER_BOUND, Y_LOWER_BOUND, Y_UPPER_BOUND)
     ball.out_of_boundary(X_LOWER_BOUND, X_UPPER_BOUND, Y_LOWER_BOUND, Y_UPPER_BOUND)
 
+    #GOAL OR MATCH WIN FUNCTION
+    score_obj.goal_win_checker((user1,user2),ball,SCORE_BOUNDARY_PERCENT)
 
     # ACTION OF USER IN LOOP
         # MOVE THE USER

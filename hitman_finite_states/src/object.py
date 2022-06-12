@@ -174,6 +174,9 @@ class Player(User):
     def __init__(self,window,x,y,fps,radius,color,domain):
         #CALLING USER CONSTRUCTOR
         super().__init__(window,x,y,fps,radius,color)
+
+        #TO RESPAWN
+        self.spawn_location = (x,y)
         
         self.domain = domain
         # DOMAIN OF KEYS ACCEPTED
@@ -183,6 +186,10 @@ class Player(User):
                         # K_UP:2,
                         # K_DOWN:3,
                         # K_SPACE:4}
+    
+    def respawn(self):
+        self.x, self.y = self.spawn_location
+        self.init()
 
 
 class Ball(MovableObject):
@@ -247,7 +254,7 @@ class Ball(MovableObject):
         if distance > 0 and distance < self.radius + player.radius:
 
             # if player isn't moving
-            if player.horizontal_factor and player.vertical_factor == 0:
+            if player.horizontal_factor == 0 and player.vertical_factor == 0:
                 if self.vertical_factor == 0:
                     self.horizontal_factor *= -1
                 else:
