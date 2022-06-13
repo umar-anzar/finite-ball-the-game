@@ -15,7 +15,12 @@ class Score:
         #PUT ALL IMAGES IN ARRAY
         self.score_img_array = []
         try:
-            for i in range(7):
+            with open("image_score.txt",'r') as file:
+                score = int(eval(file.read())) + 2
+        except Exception:
+            score = 10
+        try:
+            for i in range(score):
                 self.score_img_array.append((pygame.transform.scale(pygame.image.load(location1.format(i)).convert_alpha(),size),
                 pygame.transform.scale(pygame.image.load(location2.format(i)).convert_alpha(),size)))
         except Exception:
