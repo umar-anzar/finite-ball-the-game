@@ -43,7 +43,9 @@ self.TransitionsTable = [
 5. In-Elastic Collisions physics is applied with true angles between the user and the ball, as well as between the ball and the window boundaries. <img src='Finite States\collisionBallHit.png' alt='collision' width=75%>
 
 
-
-
+## Game Screenshots
+<img src='game screen shot\a.jpg' alt="game screenshot" width=75%>
+<img src='game screen shot\b.jpg' alt="game screenshot" width=75%>
+<img src='game screen shot\c.jpg' alt="game screenshot" width=75%>
 
 
