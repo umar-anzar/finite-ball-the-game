@@ -1,28 +1,27 @@
 # Finite ball by Muhammad Umar Anzar
 ## Automata-Project
 
-A simple game two-player 2d game soccer game made using pygame library on python. 
+A basic two-player 2D soccer game created in Python with the Pygame framework. 
 
 ## Purpose
 The purpose was to make use of finite state machine
 
 ## Overall Description
-- Language : python 3.9
+- Language : python3
 - Library : pygame
 - requirements to play : Two user and only one keyboard
 
 ## Features, Functions
 
-1. Pygame python is use to create the whole gui game and auto-py-to-exe is used to create executable file
-1. All the movement of player is made using finite state machine (Deterministic Finite Automata). An unique condition and additional `set array` is added to handle the movement key release event and the key down event.
-When multiple keys are pressed by a user and only one or two of keys are release, then the unique condition makes the transition goes back to initial state and using `set array`, the keys which haven't released yet makes the transition again to new states accoriding to the keys which are already in pressed state.
+1. Python `pygame` is used to make the entire GUI game, and `auto-py-to-exe` is used to make the executable file.
+1. The player's entire movement is controlled by a finite state machine (Deterministic Finite Automata). To handle the movement `key release `and `key pressed` events, a new condition and additional `set array` are introduced. When a user presses numerous keys and only one or two of them are released, the unique condition causes the transition to return to the initial state, and utilizing the set array, the keys that haven't released yet cause the transition to new states in accordance with the keys that are already pressed.
 <img src='Finite States\user_motion_finite_states.png' alt="DFA of motion" width=75%>
 
 
-1. Handled diagonal speed from increasing due to the resultant motion of horizontal and vertical motion.
+1. Controlled the increase in diagonal speed as a result of the horizontal and vertical motions.
 <img src='Finite States\diagonal_speed.png' alt='diagonal speed' width=75%>
 
-1. InElastic Collisions physics i appled between user and ball and ball and window boundary with real angles.
+1. In-Elastic Collisions physics is applied with true angles between the user and the ball, as well as between the ball and the window boundaries.
 <img src='Finite States\collisionBallHit.png' alt='collision' width=75%>
 
 
