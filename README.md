@@ -1,12 +1,21 @@
-# Finite ball by Muhammad Umar Anzar
-## Automata-Project
+# Automata-Project
+> - By Muhammad Umar Anzar
+> - University Of karachi 
+> - UBIT department of computer science
+> - Semester 5
+> - Subject Computer Theory (Automata)
+
+## Finite ball
+<hr>
 
 A basic two-player 2D soccer game created in Python with the Pygame framework. 
 
 ## Purpose
-The purpose was to make use of finite state machine
+
+The goal was to include a finite state machine into a project.
 
 ## Overall Description
+
 - Language : python3
 - Library : pygame
 - requirements to play : Two user and only one keyboard
