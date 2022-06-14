@@ -69,7 +69,6 @@ class User(MovableObject):
         pygame.draw.circle(self.window.screen,pygame.Color(self.color),(self.x,self.y),self.radius+4,width=2)
 
 
-
     #STOPS USER FROM CROSSING BOUNDARY
     def user_boundary(self,x_lower_bound, x_upper_bound, y_lower_bound, y_upper_bound):
         if self.x < x_lower_bound:
@@ -80,7 +79,6 @@ class User(MovableObject):
             self.y = y_lower_bound
         elif self.y > y_upper_bound:
             self.y = y_upper_bound
-
 
 
     #TRANSTITION FROM ONE STATE TO ANOTHER ON KEY PRESS AND RELEASE
@@ -128,7 +126,6 @@ class User(MovableObject):
                 return
 
 
-
     #APPLY MOVING MOTION
     def move(self):
 
@@ -144,7 +141,6 @@ class User(MovableObject):
 
         self.x += self.horizontal_factor * fps
         self.y += self.vertical_factor * fps
-
 
 
     #PAUSE(INITIAL)
@@ -177,6 +173,7 @@ class Player(User):
 
         #TO RESPAWN
         self.spawn_location = (x,y)
+
         
         self.domain = domain
         # DOMAIN OF KEYS ACCEPTED
@@ -197,6 +194,17 @@ class Ball(MovableObject):
     def __init__(self,window,x,y,fps,radius,color) -> None:
         #CALLING OBJECT CONSTRUCTOR
         super().__init__(window,x,y,fps,radius,color)
+
+                
+        #ON HIT
+        try:
+            with open("onHitSpeed.txt",'r') as file:
+                self.onHitspeed = int(eval(file.read()))
+        except Exception:
+            self.onHitspeed = 2
+        print("On hit speed set to: ",self.onHitspeed)
+
+        
         self.init()
 
 
@@ -294,7 +302,7 @@ class Ball(MovableObject):
 
 
 
-            self.fps = player.fps * 2
+            self.fps = player.fps * self.onHitspeed
 
         
 

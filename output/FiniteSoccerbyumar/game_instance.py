@@ -1,7 +1,7 @@
 def main():
     import pygame
     import window_functions as wf
-    import object
+    import objects
     import score
 
     #Window Specification---------------------------------------------------------------------------------------------------
@@ -28,7 +28,12 @@ def main():
     #Player-----------------------------------------------------------------------------------------------------------------
     x1, x2 = SCREEN_WIDTH * 20/100, SCREEN_WIDTH * 80/100
     y1, y2 = SCREEN_HEIGHT // 2, SCREEN_HEIGHT// 2
-    FPS = 5
+    try:
+        with open("speed.txt",'r') as file:
+                FPS = int(eval(file.read()))
+    except Exception:
+        FPS = 5
+    print("Speed set to: ",FPS)
     RADIUS = 15
     USER_COLOR1 = "#1CB3FF"
     USER_COLOR2 = "#FFA500"
@@ -52,8 +57,8 @@ def main():
                     pygame.K_KP_0:4}
 
 
-    user1 = object.Player(window,x1,y1,FPS,RADIUS,USER_COLOR1,KEYBTN1)
-    user2 = object.Player(window,x2,y2,FPS,RADIUS,USER_COLOR2,KEYBTN2)
+    user1 = objects.Player(window,x1,y1,FPS,RADIUS,USER_COLOR1,KEYBTN1)
+    user2 = objects.Player(window,x2,y2,FPS,RADIUS,USER_COLOR2,KEYBTN2)
 
     #BALL-------------------------------------------------------------------------------------------------------------------
     x =  SCREEN_WIDTH//2
@@ -63,7 +68,7 @@ def main():
     BALL_COLOR = "#FF2222"
 
 
-    ball = object.Ball(window,x,y,FPS,BALL_RADIUS,BALL_COLOR)
+    ball = objects.Ball(window,x,y,FPS,BALL_RADIUS,BALL_COLOR)
 
 
     #BOUNDARY---------------------------------------------------------------------------------------------------------------
@@ -73,8 +78,14 @@ def main():
     X_BALL_LOWER_BOUND, X_BALL_UPPER_BOUND = BALL_RADIUS, SCREEN_WIDTH - BALL_RADIUS
     Y_BALL_LOWER_BOUND, Y_BALL_UPPER_BOUND = BALL_RADIUS, SCREEN_HEIGHT - BALL_RADIUS
 
-    #GAME FPS
-    GAME_FPS = 60
+    #GAME FPS---------------------------------------------------------------------------------------------------------------
+    try:
+        with open("fps.txt",'r') as file:
+                GAME_FPS = int(eval(file.read()))
+    except Exception:
+        GAME_FPS = 60
+
+    print("Game fps set to: ",GAME_FPS)
     clock = pygame.time.Clock()
 
     #PROGRAM LOOP-----------------------------------------------------------------------------------------------------------
