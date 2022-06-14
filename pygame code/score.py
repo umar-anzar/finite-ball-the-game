@@ -1,4 +1,4 @@
-from object import Ball
+from objects import Ball
 import pygame
 import window_functions as wf
 import time
@@ -19,6 +19,7 @@ class Score:
                 score = int(eval(file.read())) + 2
         except Exception:
             score = 10
+        print("Total score set to: ",score)
         try:
             for i in range(score):
                 self.score_img_array.append((pygame.transform.scale(pygame.image.load(location1.format(i)).convert_alpha(),size),

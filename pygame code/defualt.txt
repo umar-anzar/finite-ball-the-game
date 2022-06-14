@@ -1,0 +1,4 @@
+fps = 60
+speed = 5
+score = 10
+onhitspeed =2

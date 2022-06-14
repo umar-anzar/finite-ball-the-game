@@ -173,6 +173,7 @@ class Player(User):
 
         #TO RESPAWN
         self.spawn_location = (x,y)
+
         
         self.domain = domain
         # DOMAIN OF KEYS ACCEPTED
@@ -193,6 +194,17 @@ class Ball(MovableObject):
     def __init__(self,window,x,y,fps,radius,color) -> None:
         #CALLING OBJECT CONSTRUCTOR
         super().__init__(window,x,y,fps,radius,color)
+
+                
+        #ON HIT
+        try:
+            with open("onHitSpeed.txt",'r') as file:
+                self.onHitspeed = int(eval(file.read()))
+        except Exception:
+            self.onHitspeed = 2
+        print("On hit speed set to: ",self.onHitspeed)
+
+        
         self.init()
 
 
@@ -290,7 +302,7 @@ class Ball(MovableObject):
 
 
 
-            self.fps = player.fps * 2
+            self.fps = player.fps * self.onHitspeed
 
         
 
