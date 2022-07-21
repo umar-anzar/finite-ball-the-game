@@ -24,7 +24,7 @@ The goal was to include a finite state machine in a project.
 
 1. Python `pygame` is used to make the entire GUI game, and `auto-py-to-exe` is used to make the executable file.
 
-2. The player's entire movement is controlled by a finite state machine (Deterministic Finite Automata). To handle the movement `key release ` and `key pressed` events, a new condition and additional `set array` are introduced.When a user presses numerous keys and only one or two of them are released, the unique condition causes the transition to return to the initial state and utilizing the set array, the keys that haven’t been released yet cause the transition to new states following the keys that are already pressed.<img src='Finite States\finite_states_diagram.png' alt="DFA of motion" width=75%>
+2. The player's entire movement is controlled by a finite state machine (Deterministic Finite Automata). To handle the movement `key release ` and `key pressed` events, a new condition and additional `set array` are introduced. When a user presses numerous keys and only one or two of them are released, the unique condition causes the transition to return to the initial state and utilizing the set array, the keys that haven’t been released yet cause the transition to new states following the keys that are already pressed.<img src='Finite States\finite_states_diagram.png' alt="DFA of motion" width=75%>
 
 ```py
 self.TransitionsTable = [
